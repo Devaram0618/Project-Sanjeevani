@@ -1,10 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Project Sanjeevani</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Sanjeevani</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#eef5ff;
+}
+
+.header{
+    background:linear-gradient(90deg,#0066ff,#00b4ff);
+    color:white;
+    text-align:center;
+    padding:25px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+.header h1{
+    font-size:36px;
+}
+
+.header p{
+    margin-top:8px;
+    opacity:0.9;
+}
+
+.container{
+    max-width:1200px;
+    margin:40px auto;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    margin-bottom:30px;
+}
+
+.card h2{
+    color:#0066ff;
+    margin-bottom:20px;
+}
+
+textarea{
+    width:100%;
+    height:180px;
+    border:2px solid #d8e5ff;
+    border-radius:12px;
+    padding:15px;
+    font-size:18px;
+    resize:none;
+}
+
+textarea:focus{
+    outline:none;
+    border-color:#0066ff;
+}
+
+button{
+    margin-top:20px;
+    background:#0066ff;
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:12px;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#004ecc;
+}
+
+.result{
+    background:#f8fbff;
+    border-left:6px solid #0066ff;
+    padding:20px;
+    border-radius:12px;
+    min-height:150px;
+    white-space:pre-wrap;
+    line-height:1.6;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#555;
+}
+</style>
 </head>
+
 <body>
-    <h1>Project Sanjeevani</h1>
-    <p>AI Powered Road Accident Detection System</p>
+
+<div class="header">
+    <h1>🚑 Project Sanjeevani</h1>
+    <p>AI Powered Road Accident Emergency Response System</p>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h2>Accident Description</h2>
+
+        <textarea
+        id="description"
+        placeholder="Describe the accident here..."></textarea>
+
+        <button onclick="analyzeAccident()">
+            Analyze Accident
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>AI Emergency Analysis</h2>
+
+        <div id="result" class="result">
+Waiting for accident analysis...
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    Project Sanjeevani | AI Road Safety System
+</div>
+
+<script>
+
+async function analyzeAccident(){
+
+    let description =
+    document.getElementById("description").value;
+
+    if(description.trim()===""){
+        alert("Please enter accident details");
+        return;
+    }
+
+    document.getElementById("result").innerHTML =
+    "Analyzing accident...";
+
+    try{
+
+        const response = await fetch(
+        "http://127.0.0.1:5000/analyze",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                description:description
+            })
+        });
+
+        const data = await response.json();
+
+        document.getElementById("result").innerHTML =
+        data.analysis;
+
+    }
+    catch(error){
+
+        document.getElementById("result").innerHTML =
+        "Unable to connect to backend server.";
+
+    }
+}
+
+</script>
+
 </body>
 </html>
